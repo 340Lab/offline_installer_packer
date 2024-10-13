@@ -51,7 +51,7 @@ jobs:
         run: |
           python3 -c '
           import yaml, os, json
-          folders = [f"releases/{d[:-3]}" for d in os.listdir("./") if d.endswith(".yml")]
+          folders = [f"releases/{d[:-4]}" for d in os.listdir("./") if d.endswith(".yml")]
           with open("folders.json", "w") as fh:
               json.dump(folders, fh)
           '
@@ -70,6 +70,7 @@ jobs:
 
   create_releases:
     needs: build
+    permissions: write-all
     runs-on: ubuntu-latest
 
     steps:
@@ -84,6 +85,7 @@ jobs:
       - name: Read folders
         id: read_folders
         run: |
+          cat folders.json
           folders=$(cat folders.json)
           echo "folders=$folders" >> $GITHUB_OUTPUT
 
@@ -108,10 +110,22 @@ jobs:
           # 遍历文件夹列表，创建 release
           for folder in folder_list:
               print(f"Creating release for folder: {folder}")
+              print(f"Files in {folder}: {os.listdir(folder)}")
               folder_name = os.path.basename(folder)
-
               # 使用 os.system 调用 'gh release create' 命令
               os.system(f'gh release create {folder_name} --title "Release for {folder}" --notes "Automated release"')
+              
+              
+              with open("install.py") as f:
+                  install=f.read()
+                  install=install.replace("APP_NAME = ''", f"APP_NAME = '{folder_name}'")
+                  deb_packs=[deb for deb in os.listdir(folder) if deb.endswith(".deb")]
+                  install=install.replace("DEB_PACKAGES = []", f"DEB_PACKAGES = {deb_packs}")
+                  
+              with open(f"{folder}/install.py", "w") as f:
+                  f.write(install)
+              os.system(f'gh release upload {folder_name} {folder}/*')
           EOF
         env:
           folders: ${{ steps.read_folders.outputs.folders }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
