@@ -67,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: releases/
-          key: ${{ runner.os }}-build6-${{ matrix.arch }}
+          key: ${{ runner.os }}-build7-${{ matrix.arch }}
 
   create_releases:
     needs: build
@@ -94,7 +94,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: releases/
-          key: ${{ runner.os }}-build6-${{ matrix.arch }}
+          key: ${{ runner.os }}-build7-${{ matrix.arch }}
 
       - name: Create releases using Python
         run: |
@@ -121,13 +121,15 @@ jobs:
                   install=f.read()
                   install=install.replace("APP_NAME = ''", f"APP_NAME = '{folder_name}'")
                   zip_packs=[deb for deb in os.listdir(folder) if deb.endswith(".zip")]
+                  for zip_pack in zip_packs:
+                      os.system(f"unzip -o {folder}/{zip_pack}")
                   print("zip_packs=",zip_packs)
                   install=install.replace("DEB_PACKAGES = []", f"DEB_PACKAGES = {zip_packs}")
                   
               with open(f"{folder}/install.py", "w") as f:
                   f.write(install)
               os.system(f'gh release upload {folder_name} {folder}/*')
-              os.system(f'gh release upload {folder_name} {folder}/install.py --clobber')
+              # os.system(f'gh release upload {folder_name} {folder}/install.py --clobber')
           EOF
         env:
           folders: ${{ steps.read_folders.outputs.folders }}

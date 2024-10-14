@@ -31,6 +31,11 @@ def download_deb_packages():
         except Exception as e:
             print(f'Failed to download {package}: {e}')
 
+    apt_offline_url="https://github.com/rickysarraf/apt-offline/releases/download/v1.8.5/apt-offline-1.8.5.tar.gz"
+    if not os.path.exists(f"{DOWNLOAD_DIR}/apt-offline-1.8.5.tar.gz"):
+        print(f'Downloading {apt_offline_url}')
+        os.system(f"wget {apt_offline_url} -O {DOWNLOAD_DIR}/apt-offline-1.8.5.tar.gz")
+
 def install_deb_packages():
     DOWNLOAD_DIR=sys.argv[2]
     # deb_files = [os.path.join(DOWNLOAD_DIR, package) for package in DEB_PACKAGES]
