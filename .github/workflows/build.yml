@@ -121,9 +121,11 @@ jobs:
                   install=f.read()
                   install=install.replace("APP_NAME = ''", f"APP_NAME = '{folder_name}'")
                   zip_packs=[deb for deb in os.listdir(folder) if deb.endswith(".zip")]
+                  os.system(f"ls {folder}")
                   for zip_pack in zip_packs:
                       os.system(f"unzip -o {folder}/{zip_pack}")
-                  print("zip_packs=",zip_packs)
+                  os.system(f"ls {folder}")
+                  # print("zip_packs=",zip_packs)
                   install=install.replace("DEB_PACKAGES = []", f"DEB_PACKAGES = {zip_packs}")
                   
               with open(f"{folder}/install.py", "w") as f:
