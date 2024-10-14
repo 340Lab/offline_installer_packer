@@ -17,6 +17,9 @@ RUN apt-get update && \\
 # 安装 Python 依赖
 RUN pip3 install --upgrade pip
 
+RUN apt-get update
+RUN apt-get install -y apt-offline
+
 # 设置工作目录
 WORKDIR /app
 
@@ -123,16 +126,18 @@ def main():
     except:
         pass
 
-    all_packages = set()
+    # all_packages = set()
     for package in packages:
-        dependencies = get_dependencies(package)
-        print(f"Getting dependencies for {package} with {dependencies}")
-        all_packages.update(dependencies)
-        all_packages.add(package)
+        os.system(f"apt-offline get {package}.sig --bundle {package}.zip")
+        
+        # dependencies = get_dependencies(package)
+        # print(f"Getting dependencies for {package} with {dependencies}")
+        # all_packages.update(dependencies)
+        # all_packages.add(package)
 
-    all_packages = sorted(all_packages)
-    download_packages(all_packages, output_dir)
-    generate_install_script(all_packages, output_dir)
+    # all_packages = sorted(all_packages)
+    # download_packages(all_packages, output_dir)
+    # generate_install_script(all_packages, output_dir)
 
 if __name__ == "__main__":
     main()
