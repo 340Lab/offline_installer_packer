@@ -62,6 +62,14 @@ import subprocess
 import os
 import sys
 
+def os_system(command):
+    print(f"Executing command: {command}")
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if result.returncode != 0:
+        print(f"Error executing command: {result.stderr}")
+        return False
+    return True
+
 def get_dependencies(package_name):
     result = subprocess.run(
         ['apt-cache', 'depends', '--recurse', '--no-recommends', '--no-suggests', '--no-conflicts', '--no-breaks', '--no-replaces', '--no-enhances', package_name],
@@ -84,7 +92,7 @@ def get_dependencies(package_name):
     return dependencies
 
 def download_packages(packages, output_dir):
-    os.system("ls")
+    os_system("ls")
     os.chdir(output_dir)
     for package in packages:
         subprocess.run(['apt', 'download', package], check=True)
@@ -92,7 +100,7 @@ def download_packages(packages, output_dir):
         if f.endswith('.deb') and f.find("%")!=-1:
             newfname=f.replace('%','')
             print(f"rename {f} to {newfname}")
-            os.system(f"mv {f} {newfname}")
+            os_system(f"mv {f} {newfname}")
             
 
 def generate_install_script(packages, output_dir):
@@ -128,15 +136,15 @@ def main():
 
     # all_packages = set()
     for package in packages:
-        os.system(f"mkdir -p {package}")
-        os.system(f"apt-offline set {package}.sig --install-packages {package}")
-        os.system(f"apt-offline get {package}.sig -d {package}")
-        os.system(f"ls {package}")
+        os_system(f"mkdir -p {package}")
+        os_system(f"apt-offline set {package}.sig --install-packages {package}")
+        os_system(f"apt-offline get {package}.sig -d {package}")
+        os_system(f"ls {package}")
         # dependencies = get_dependencies(package)
         # print(f"Getting dependencies for {package} with {dependencies}")
         # all_packages.update(dependencies)
         # all_packages.add(package)
-    os.system("ls")
+    os_system("ls")
 
     # all_packages = sorted(all_packages)
     # download_packages(all_packages, output_dir)
