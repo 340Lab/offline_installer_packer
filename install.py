@@ -7,7 +7,8 @@ from pathlib import Path
 GITHUB_REPO = 'ActivePeter/offline_installer_packer'  # 替换为你的 GitHub 仓库
 APP_NAME = ''  # 替换为你的应用名称
 DEB_PACKAGES = []  # 替换为你的 .deb 包列表
-DOWNLOAD_DIR = f'/offline_installer_packer/{APP_NAME}_install'  # 下载目录
+user_dir=os.path.expanduser("~")
+DOWNLOAD_DIR = os.path.join(user_dir,f'offline_installer_packer/{APP_NAME}_install')  # 下载目录
 
 def download_deb_packages():
     if not os.path.exists(DOWNLOAD_DIR):
