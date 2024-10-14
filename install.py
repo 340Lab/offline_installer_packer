@@ -7,10 +7,10 @@ from pathlib import Path
 GITHUB_REPO = 'ActivePeter/offline_installer_packer'  # 替换为你的 GitHub 仓库
 APP_NAME = ''  # 替换为你的应用名称
 DEB_PACKAGES = []  # 替换为你的 .deb 包列表
-user_dir=os.path.expanduser("~")
-DOWNLOAD_DIR = os.path.join(user_dir,f'offline_installer_packer/{APP_NAME}_install')  # 下载目录
+
 
 def download_deb_packages():
+    DOWNLOAD_DIR=sys.argv[2]
     if not os.path.exists(DOWNLOAD_DIR):
         os.makedirs(DOWNLOAD_DIR)
 
@@ -32,21 +32,22 @@ def download_deb_packages():
             print(f'Failed to download {package}: {e}')
 
 def install_deb_packages():
-    deb_files = [os.path.join(DOWNLOAD_DIR, package) for package in DEB_PACKAGES]
-    deb_files_str = ' '.join(deb_files)
+    DOWNLOAD_DIR=sys.argv[2]
+    # deb_files = [os.path.join(DOWNLOAD_DIR, package) for package in DEB_PACKAGES]
+    # deb_files_str = ' '.join(deb_files)
     
-    print(f'Installing {deb_files_str}')
-    command = f'sudo dpkg -i {deb_files_str}'
-    result = os.system(command)
+    # print(f'Installing {deb_files_str}')
+    # command = f'sudo dpkg -i {deb_files_str}'
+    # result = os.system(command)
     
-    if result == 0:
-        print('All packages installed successfully')
-    else:
-        print(f'Installation failed: return code {result}')
+    # if result == 0:
+    #     print('All packages installed successfully')
+    # else:
+    #     print(f'Installation failed: return code {result}')
 
 def main():
-    if len(sys.argv) != 2:
-        print('Usage: python script.py <prepare|install>')
+    if len(sys.argv) !=3:
+        print('Usage: python script.py <prepare|install> <package_dir>')
         sys.exit(1)
 
     action = sys.argv[1]
