@@ -7,21 +7,22 @@ from pathlib import Path
 GITHUB_REPO = 'ActivePeter/offline_installer_packer'  # 替换为你的 GitHub 仓库
 APP_NAME = ''  # 替换为你的应用名称
 DEB_PACKAGES = []  # 替换为你的 .deb 包列表
-DOWNLOAD_DIR = f'/tmp/{APP_NAME}_install'  # 下载目录
+DOWNLOAD_DIR = f'/offline_installer_packer/{APP_NAME}_install'  # 下载目录
 
 def download_deb_packages():
     if not os.path.exists(DOWNLOAD_DIR):
         os.makedirs(DOWNLOAD_DIR)
 
     base_url = f'https://github.com/{GITHUB_REPO}/releases/download/{APP_NAME}/'
-    
+
     for package in DEB_PACKAGES:
         url = base_url + package
         local_path = os.path.join(DOWNLOAD_DIR, package)
         
         print(f'Downloading {url} to {local_path}')
         try:
-            urllib.request.urlretrieve(url, local_path)
+            os.system(f"wget {url} -O {local_path}")
+            # urllib.request.urlretrieve(url, local_path, cont)
             print(f'Successfully downloaded {package}')
         except Exception as e:
             print(f'Failed to download {package}: {e}')
