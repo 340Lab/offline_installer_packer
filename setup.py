@@ -18,7 +18,7 @@ RUN apt-get update && \\
 RUN pip3 install --upgrade pip
 
 RUN apt-get update
-RUN apt-get install -y apt-offline
+RUN apt-get install -y apt-offline unzip
 
 # 设置工作目录
 WORKDIR /app
@@ -135,6 +135,7 @@ def main():
         # print(f"Getting dependencies for {package} with {dependencies}")
         # all_packages.update(dependencies)
         # all_packages.add(package)
+    os.system("ls")
 
     # all_packages = sorted(all_packages)
     # download_packages(all_packages, output_dir)
