@@ -123,6 +123,7 @@ jobs:
                   zip_packs=[deb for deb in os.listdir(folder) if deb.endswith(".zip")]
                   os.system(f"ls {folder}")
                   for zip_pack in zip_packs:
+                      print(f"unzip {zip_pack}")
                       os.system(f"unzip -o {folder}/{zip_pack}")
                   os.system(f"ls {folder}")
                   # print("zip_packs=",zip_packs)
