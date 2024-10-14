@@ -85,6 +85,12 @@ def download_packages(packages, output_dir):
     os.chdir(output_dir)
     for package in packages:
         subprocess.run(['apt', 'download', package], check=True)
+    for f in os.listdir(output_dir):
+        if f.endswith('.deb') and f.find("%")!=-1:
+            newfname=f.replace('%','')
+            print(f"rename {f} to {newfname}")
+            os.system(f"mv {f} {newfname}")
+            
 
 def generate_install_script(packages, output_dir):
     with open(os.path.join(output_dir, 'install.sh'), 'w') as f:
