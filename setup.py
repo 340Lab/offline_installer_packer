@@ -128,6 +128,7 @@ def main():
 
     # all_packages = set()
     for package in packages:
+        os.system(f"apt-offline set {package}.sig --install-packages {package}")
         os.system(f"apt-offline get {package}.sig --bundle {package}.zip")
         
         # dependencies = get_dependencies(package)

@@ -67,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: releases/
-          key: ${{ runner.os }}-build4-${{ matrix.arch }}
+          key: ${{ runner.os }}-build6-${{ matrix.arch }}
 
   create_releases:
     needs: build
@@ -94,7 +94,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: releases/
-          key: ${{ runner.os }}-build4-${{ matrix.arch }}
+          key: ${{ runner.os }}-build6-${{ matrix.arch }}
 
       - name: Create releases using Python
         run: |
@@ -120,9 +120,9 @@ jobs:
               with open("install.py") as f:
                   install=f.read()
                   install=install.replace("APP_NAME = ''", f"APP_NAME = '{folder_name}'")
-                  deb_packs=[deb for deb in os.listdir(folder) if deb.endswith(".deb")]
-                  print("deb_packs=",deb_packs)
-                  install=install.replace("DEB_PACKAGES = []", f"DEB_PACKAGES = {deb_packs}")
+                  zip_packs=[deb for deb in os.listdir(folder) if deb.endswith(".zip")]
+                  print("zip_packs=",zip_packs)
+                  install=install.replace("DEB_PACKAGES = []", f"DEB_PACKAGES = {zip_packs}")
                   
               with open(f"{folder}/install.py", "w") as f:
                   f.write(install)
