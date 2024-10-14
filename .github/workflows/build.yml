@@ -67,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: releases/
-          key: ${{ runner.os }}-build7-${{ matrix.arch }}
+          key: ${{ runner.os }}-build8-${{ matrix.arch }}
 
   create_releases:
     needs: build
@@ -94,7 +94,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: releases/
-          key: ${{ runner.os }}-build7-${{ matrix.arch }}
+          key: ${{ runner.os }}-build8-${{ matrix.arch }}
 
       - name: Create releases using Python
         run: |
