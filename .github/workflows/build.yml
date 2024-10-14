@@ -125,7 +125,7 @@ jobs:
               with open(f"{folder}/install.py", "w") as f:
                   f.write(install)
               os.system(f'gh release upload {folder_name} {folder}/*')
-              os.system(f'gh release upload {folder_name} {folder}/install.py')
+              os.system(f'gh release upload {folder_name} {folder}/install.py --clobber')
           EOF
         env:
           folders: ${{ steps.read_folders.outputs.folders }}

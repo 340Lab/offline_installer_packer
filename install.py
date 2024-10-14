@@ -21,6 +21,9 @@ def download_deb_packages():
         local_path = os.path.join(DOWNLOAD_DIR, package)
         
         print(f'Downloading {url} to {local_path}')
+        if os.path.exists(local_path):
+            print(f'{local_path} already exists. Skipping download.')
+            continue
         try:
             os.system(f"wget {url} -O {local_path}")
             # urllib.request.urlretrieve(url, local_path, cont)
